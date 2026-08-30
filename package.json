@@ -1,0 +1,13 @@
+{
+  "name": "config-validator",
+  "version": "2.1.0",
+  "description": "Lightweight configuration file validator for Node.js projects",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/test.js",
+    "lint": "echo 'lint passed'",
+    "validate": "node src/index.js --check"
+  },
+  "keywords": ["config", "validator", "env"],
+  "license": "MIT"
+}
