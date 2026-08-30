@@ -51,5 +51,21 @@ test('handles values with equals sign', () => {
   assert(result.valid, 'Should be valid');
 });
 
+test('detects malformed line without equals', () => {
+  const f = path.join(tmpDir, '.env5');
+  fs.writeFileSync(f, 'PORT=3000\nBADLINE\n');
+  const result = validateConfig(f);
+  assert(!result.valid, 'Should be invalid');
+  assert(result.errors.some(e => e.includes('Invalid format')), 'Should report format error');
+});
+
+test('handles empty file', () => {
+  const f = path.join(tmpDir, '.env6');
+  fs.writeFileSync(f, '');
+  const result = validateConfig(f);
+  assert(result.valid, 'Empty file should be valid');
+  assert(result.errors.length === 0, 'Should have no errors');
+});
+
 fs.rmSync(tmpDir, { recursive: true, force: true });
 console.log('\nDone.');
