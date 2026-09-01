@@ -51,5 +51,37 @@ test('handles values with equals sign', () => {
   assert(result.valid, 'Should be valid');
 });
 
+test('strict mode detects duplicate keys', () => {
+  const f = path.join(tmpDir, '.env5');
+  fs.writeFileSync(f, 'PORT=3000\nPORT=8080\n');
+  const result = validateConfig(f, { strict: true });
+  assert(!result.valid, 'Should be invalid in strict mode');
+  assert(result.errors.some(e => e.includes('Duplicate')), 'Should detect duplicate');
+});
+
+test('strict mode warns on non-uppercase keys', () => {
+  const f = path.join(tmpDir, '.env6');
+  fs.writeFileSync(f, 'port=3000\n');
+  const result = validateConfig(f, { strict: true });
+  assert(result.warnings.length > 0, 'Should have warnings');
+  assert(result.warnings[0].includes('uppercase'), 'Should warn about case');
+});
+
+test('checks required keys', () => {
+  const f = path.join(tmpDir, '.env7');
+  fs.writeFileSync(f, 'PORT=3000\n');
+  const result = validateConfig(f, { requiredKeys: ['PORT', 'DATABASE_URL'] });
+  assert(!result.valid, 'Should be invalid');
+  assert(result.errors.some(e => e.includes('DATABASE_URL')), 'Should report missing key');
+});
+
+test('returns discovered keys', () => {
+  const f = path.join(tmpDir, '.env8');
+  fs.writeFileSync(f, 'A=1\nB=2\nC=3\n');
+  const result = validateConfig(f);
+  assert(result.keys.length === 3, 'Should find 3 keys');
+  assert(result.keys.includes('B'), 'Should include B');
+});
+
 fs.rmSync(tmpDir, { recursive: true, force: true });
 console.log('\nDone.');
