@@ -4,5 +4,3 @@ node_modules/
 .env.development
 .env.production
 *.log
-.claude/settings.json
-.claude/settings.local.json
