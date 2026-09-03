@@ -51,5 +51,13 @@ test('handles values with equals sign', () => {
   assert(result.valid, 'Should be valid');
 });
 
+test('supports export prefix', () => {
+  const f = path.join(tmpDir, '.env5');
+  fs.writeFileSync(f, 'export PORT=3000\nexport NODE_ENV=production\n');
+  const result = validateConfig(f);
+  assert(result.valid, 'Should be valid');
+  assert(result.errors.length === 0, 'Should have no errors');
+});
+
 fs.rmSync(tmpDir, { recursive: true, force: true });
 console.log('\nDone.');
