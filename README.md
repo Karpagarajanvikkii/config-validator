@@ -14,6 +14,7 @@ npm test               # Run test suite
 - Validates `.env` file formatting
 - Detects missing values, malformed lines
 - Supports multiple env files (`.env`, `.env.local`, `.env.development`, `.env.production`)
+- Supports the `export KEY=value` convention used in sourceable env files
 - Ignores comments and blank lines
 
 ## Contributing

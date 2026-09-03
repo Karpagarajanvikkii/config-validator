@@ -6,7 +6,9 @@ function validateConfig(configPath) {
   const lines = content.split('\n').filter(l => l.trim() && !l.startsWith('#'));
   const errors = [];
 
-  for (const line of lines) {
+  for (const rawLine of lines) {
+    // Support the common `export KEY=value` convention used in sourceable .env files
+    const line = rawLine.startsWith('export ') ? rawLine.slice('export '.length) : rawLine;
     const [key, ...rest] = line.split('=');
     if (!key || rest.length === 0) {
       errors.push(`Invalid format: ${line}`);
